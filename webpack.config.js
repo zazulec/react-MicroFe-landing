@@ -2,8 +2,7 @@
 
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-import { container  } from 'webpack';
-const {ModuleFederationPlugin} = container;
+const { ModuleFederationPlugin } = require('webpack').container;
 
 const isProduction = process.env.NODE_ENV === "production";
 
@@ -16,17 +15,26 @@ const config = {
   },
   devServer: {
     open: true,
-    host: "localhost:3002",
+    host: "localhost",
+    port: '3002'
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "index.html",
+      templateContent: `
+    <html lang="en">
+      <body>
+        <div id="root"></div>
+      </body>
+    </html>
+  `
     }),
       new ModuleFederationPlugin({
-name: 'landing',
+        name: 'landingMF',
         filename: 'remoteEntry.js',
         remotes: {},
-        exposes: {}
+        exposes: {
+          './Landing': './src/App.js'
+        }
       })
     // Add your plugins here
     // Learn more about plugins from https://webpack.js.org/configuration/plugins/

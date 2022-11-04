@@ -12,7 +12,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "set PORT=3002 && react-scripts start",
+    "start": "webpack serve --config webpack.config.js",
     "build": "webpack --mode=production --node-env=production",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
