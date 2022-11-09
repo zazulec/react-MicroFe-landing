@@ -4,6 +4,8 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { ModuleFederationPlugin } = require('webpack').container;
 
+const packageJsonDeps = require('./package.json').dependencies
+
 const isProduction = process.env.NODE_ENV === "production";
 
 const stylesHandler = "style-loader";
@@ -20,13 +22,7 @@ const config = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      templateContent: `
-    <html lang="en">
-      <body>
-        <div id="root"></div>
-      </body>
-    </html>
-  `
+      template: './public/index.html'
     }),
       new ModuleFederationPlugin({
         name: 'landingMF',
@@ -34,7 +30,8 @@ const config = {
         remotes: {},
         exposes: {
           './Landing': './src/App.js'
-        }
+        },
+        shared: {...packageJsonDeps, react: { singleton: true ,  strictVersion: true, requiredVersion: '18.2.0', eager: true}, 'react-dom': { singleton: true , strictVersion: true, requiredVersion: '18.2.0', eager: true } },
       })
     // Add your plugins here
     // Learn more about plugins from https://webpack.js.org/configuration/plugins/
